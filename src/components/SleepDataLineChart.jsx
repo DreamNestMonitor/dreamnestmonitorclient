@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react'
-import axios from "axios";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -73,11 +72,11 @@ const SleepDataLineChart = ({ prop }) => {
 
     useEffect(() => {
         Chart();
-    }, [prop]);
+    }, [prop]); // Need props here to ensure this component re-renders with new props
 
     return (
         <div>
-            <h2>Bar Chart</h2>
+            <h2>Line Chart</h2>
             <Line data={data} options={options} />
         </div>
     )

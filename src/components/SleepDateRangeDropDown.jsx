@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SleepDataLineChart from "./SleepDataLineChart.jsx";
+import moment from "moment";
 
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
@@ -71,11 +72,11 @@ const SleepDateRangeDropDown = () => {
                 <option value="">Select...</option>
                 {data.map((item) => (
                     <option key={item.sleepDateID} value={`${item.sleepDateTimeFrom}|${item.sleepDateTimeTo}`}>
-                        {item.sleepDateTimeFrom}
+                        {moment(item.sleepDateTimeFrom).format("MMMM D, YYYY, h:mm:ss")}
                     </option>
                 ))}
             </select>
-            {prop ? <SleepDataLineChart prop={prop}/> : null}
+            {selectedOption ? <SleepDataLineChart prop={prop}/> : null}
         </div>
     );
 };
