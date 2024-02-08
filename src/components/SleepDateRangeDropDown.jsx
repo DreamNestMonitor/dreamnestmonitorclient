@@ -1,13 +1,23 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import SleepDataLineChart from "./SleepDataLineChart.jsx";
+import EnvironmentDataLineCharts from "./EnvironmentDataLineCharts.jsx";
 import moment from "moment";
+import HeartRateDataLineChart from "./HeartRateDataLineChart.jsx";
 
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
-    const [selectedDateFrom, setSelectedDateFrom] = useState("");
-    const [selectedDateTo, setSelectedDateTo] = useState("");
     const [prop, setProp] = useState([{
+        labels: [],
+        datasets: [
+            {
+                label: "",
+                data: [],
+                borderColor: "",
+                backgroundColor: "",
+            }
+        ]
+    }])
+    const [heartRateProp, setHeartRateProp] = useState([{
         labels: [],
         datasets: [
             {
@@ -50,14 +60,19 @@ const SleepDateRangeDropDown = () => {
         const datesFromAndTo = selectedValue.split('|');
         const sleepDateTimeFrom = datesFromAndTo[0];
         const sleepDateTimeTo = datesFromAndTo[1];
-        setSelectedDateFrom(sleepDateTimeFrom);
-        setSelectedDateTo(sleepDateTimeTo);
-        console.log("From: " + selectedDateFrom);
-        console.log("To: " + selectedDateTo);
-        axios.get(`http://localhost:8080/api/environmentdata/range?from=${selectedDateFrom}&to=${selectedDateTo}`)
+        console.log(sleepDateTimeFrom);
+        console.log(sleepDateTimeTo);
+        axios.get(`http://localhost:8080/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
-                console.log('Response:', response.data);
                 setProp(response.data);
+                // Handle the response data as needed
+            })
+            .catch((error) => {
+                console.error('Error fetching data based on selection:', error);
+            });
+        axios.get(`http://localhost:8080/api/heartrate/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
+            .then((response) => {
+                setHeartRateProp(response.data);
                 // Handle the response data as needed
             })
             .catch((error) => {
@@ -67,16 +82,21 @@ const SleepDateRangeDropDown = () => {
 
     return (
         <div>
-            <label htmlFor="dropdown">Select an option:</label>
+            <label htmlFor="dropdown">Start of Sleep Dates:</label>
             <select id="dropdown" value={selectedOption} onChange={handleSelectChange}>
                 <option value="">Select...</option>
                 {data.map((item) => (
                     <option key={item.sleepDateID} value={`${item.sleepDateTimeFrom}|${item.sleepDateTimeTo}`}>
-                        {moment(item.sleepDateTimeFrom).format("MMMM D, YYYY, h:mm:ss")}
+                        {moment(item.sleepDateTimeFrom).format("MMMM D, YYYY, h:mm:ss A")}
                     </option>
                 ))}
             </select>
-            {selectedOption ? <SleepDataLineChart prop={prop}/> : null}
+            {selectedOption ? (
+                <>
+                    <EnvironmentDataLineCharts prop={prop}/>
+                    <HeartRateDataLineChart prop={heartRateProp}/>
+                </>
+            ) : null}
         </div>
     );
 };

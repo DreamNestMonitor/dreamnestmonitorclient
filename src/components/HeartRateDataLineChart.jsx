@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react'
+
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -21,7 +22,7 @@ ChartJS.register(
     Legend
 );
 
-export const options = {
+export const option = {
     responsive: true,
     plugins: {
         legend: {
@@ -29,12 +30,12 @@ export const options = {
         },
         title: {
             display: true,
-            text: 'Temperature Fluctuations',
+            text: "Heart Rate Fluctuations"
         },
     },
 };
 
-const SleepDataLineChart = ({ prop }) => {
+const HeartRateDataLineChart = ({ prop }) => {
     const [data, setData] = useState({
         labels: [],
         datasets: [
@@ -49,21 +50,21 @@ const SleepDataLineChart = ({ prop }) => {
 
     const Chart = () => {
         let sorted = [];
-        let tempTime = [];
-        let tempReading = [];
+        let time = [];
+        let heartRateReadings = [];
 
         sorted = prop;
-        sorted.sort((a,b) => new Date(a.envDateTime) - new Date(b.envDateTime));
+        sorted.sort((a,b) => new Date(a.rateDateTime) - new Date(b.rateDateTime));
         sorted.forEach(dataObj => {
-            tempTime.push(dataObj.envTime);
-            tempReading.push(dataObj.temp);
+            time.push(dataObj.rateTime);
+            heartRateReadings.push(dataObj.rate);
         })
         setData({
-            labels: tempTime,
+            labels: time,
             datasets: [
                 {
-                    label: "Temp",
-                    data: tempReading,
+                    label: "Heart Rate",
+                    data: heartRateReadings,
                     borderColor: "rgb(255,99,132)",
                     backgroundColor: "rgba(255, 99, 132, 0.5)",
                 }]
@@ -76,10 +77,9 @@ const SleepDataLineChart = ({ prop }) => {
 
     return (
         <div>
-            <h2>Line Chart</h2>
-            <Line data={data} options={options} />
+            <Line data={data} options={option} />
         </div>
     )
 }
 
-export default SleepDataLineChart;
+export default HeartRateDataLineChart;
