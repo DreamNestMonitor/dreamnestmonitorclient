@@ -3,6 +3,7 @@ import axios from 'axios';
 import EnvironmentDataLineCharts from "./EnvironmentDataLineCharts.jsx";
 import moment from "moment";
 import HeartRateDataLineChart from "./HeartRateDataLineChart.jsx";
+import SleepDataLineChart from "./SleepDataLineChart.jsx";
 
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
@@ -18,6 +19,17 @@ const SleepDateRangeDropDown = () => {
         ]
     }])
     const [heartRateProp, setHeartRateProp] = useState([{
+        labels: [],
+        datasets: [
+            {
+                label: "",
+                data: [],
+                borderColor: "",
+                backgroundColor: "",
+            }
+        ]
+    }])
+    const [sleepDataProp, setSleepDataProp] = useState([{
         labels: [],
         datasets: [
             {
@@ -60,8 +72,6 @@ const SleepDateRangeDropDown = () => {
         const datesFromAndTo = selectedValue.split('|');
         const sleepDateTimeFrom = datesFromAndTo[0];
         const sleepDateTimeTo = datesFromAndTo[1];
-        console.log(sleepDateTimeFrom);
-        console.log(sleepDateTimeTo);
         axios.get(`http://localhost:8080/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setProp(response.data);
@@ -73,6 +83,14 @@ const SleepDateRangeDropDown = () => {
         axios.get(`http://localhost:8080/api/heartrate/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setHeartRateProp(response.data);
+                // Handle the response data as needed
+            })
+            .catch((error) => {
+                console.error('Error fetching data based on selection:', error);
+            });
+        axios.get(`http://localhost:8080/api/sleepdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
+            .then((response) => {
+                setSleepDataProp(response.data);
                 // Handle the response data as needed
             })
             .catch((error) => {
@@ -95,6 +113,7 @@ const SleepDateRangeDropDown = () => {
                 <>
                     <EnvironmentDataLineCharts prop={prop}/>
                     <HeartRateDataLineChart prop={heartRateProp}/>
+                    <SleepDataLineChart prop={sleepDataProp} />
                 </>
             ) : null}
         </div>

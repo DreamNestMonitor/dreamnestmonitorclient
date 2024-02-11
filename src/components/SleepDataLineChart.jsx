@@ -30,12 +30,18 @@ export const option = {
         },
         title: {
             display: true,
-            text: "Heart Rate Fluctuations"
+            text: "Sleep Level Fluctuations"
         },
     },
+    scales: {
+        y: {
+            type: 'category',
+            labels: ["rem", "deep", "light", "wake"]
+        }
+    }
 };
 
-const HeartRateDataLineChart = ({ prop }) => {
+const SleepDataLineChart = ({ prop }) => {
     const [data, setData] = useState({
         labels: [],
         datasets: [
@@ -51,25 +57,27 @@ const HeartRateDataLineChart = ({ prop }) => {
     const Chart = () => {
         let sorted = [];
         let time = [];
-        let heartRateReadings = [];
+        let sleepDataReadings = [];
 
         sorted = prop;
-        sorted.sort((a,b) => new Date(a.rateDateTime) - new Date(b.rateDateTime));
+        sorted.sort((a,b) => new Date(a.sdDateTime) - new Date(b.sdDateTime));
         sorted.forEach(dataObj => {
-            time.push(dataObj.rateTime);
-            heartRateReadings.push(dataObj.rate);
+            time.push(dataObj.sdTime);
+            sleepDataReadings.push(dataObj.level);
         })
-        if (heartRateReadings.length === 0) {
+        console.log(sleepDataReadings);
+        if (sleepDataReadings.length === 0) {
+            // If empty, set data to null
             setData(null);
         } else {
             setData({
                 labels: time,
                 datasets: [
                     {
-                        label: "Heart Rate",
-                        data: heartRateReadings,
-                        borderColor: "rgb(255,99,132)",
-                        backgroundColor: "rgba(255, 99, 132, 0.5)",
+                        label: "Sleep Levels",
+                        data: sleepDataReadings,
+                        borderColor: "rgb(164,75,215)",
+                        backgroundColor: "rgba(161,32,238,0.5)",
                     }]
             });
         }
@@ -84,10 +92,10 @@ const HeartRateDataLineChart = ({ prop }) => {
             {data ? (
                 <Line data={data} options={option}/>
             ) : (
-                <p>Heartbeat data does not exist</p>
+                <p>Sleep data does not exist</p>
             )}
         </div>
     )
 }
 
-export default HeartRateDataLineChart;
+export default SleepDataLineChart;
