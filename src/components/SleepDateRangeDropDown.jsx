@@ -4,6 +4,7 @@ import EnvironmentDataLineCharts from "./EnvironmentDataLineCharts.jsx";
 import moment from "moment";
 import HeartRateDataLineChart from "./HeartRateDataLineChart.jsx";
 import SleepDataLineChart from "./SleepDataLineChart.jsx";
+import SummaryInfo from "./SummaryInfo.jsx";
 
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
@@ -40,7 +41,6 @@ const SleepDateRangeDropDown = () => {
             }
         ]
     }])
-
     const [data, setData] = useState([{
         sleepDateID: "",
         sleepDateTimeFrom: "",
@@ -50,6 +50,10 @@ const SleepDateRangeDropDown = () => {
         sleepDateTo: "",
         sleepTimeTo: "",
     }]);
+    const [fromAndTo, setFromAndTo] = useState({
+        sleepDateTimeFrom: "",
+        sleepDateTimeTo: "",
+    });
 
     useEffect(() => {
         // Fetch data when the component mounts
@@ -72,6 +76,7 @@ const SleepDateRangeDropDown = () => {
         const datesFromAndTo = selectedValue.split('|');
         const sleepDateTimeFrom = datesFromAndTo[0];
         const sleepDateTimeTo = datesFromAndTo[1];
+        setFromAndTo({"sleepDateTimeFrom": sleepDateTimeFrom, "sleepDateTimeTo": sleepDateTimeTo});
         axios.get(`https://mirthful-seat-production.up.railway.app/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setProp(response.data);
@@ -120,6 +125,9 @@ const SleepDateRangeDropDown = () => {
             </select>
             {selectedOption ? (
                 <>
+                    <h2>Summary</h2>
+                    <SummaryInfo prop={fromAndTo} />
+                    <h2>Charts</h2>
                     <EnvironmentDataLineCharts prop={prop}/>
                     <HeartRateDataLineChart prop={heartRateProp}/>
                     <SleepDataLineChart prop={sleepDataProp} />
