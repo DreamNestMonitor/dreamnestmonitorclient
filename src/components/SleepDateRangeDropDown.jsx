@@ -57,7 +57,7 @@ const SleepDateRangeDropDown = () => {
     }, []);
 
     const fetchData = () => {
-        axios.get('http://localhost:8080/api/sleepdate')
+        axios.get('https://mirthful-seat-production.up.railway.app/api/sleepdate')
             .then((response) => {
                 setData(response.data);
             })
@@ -72,7 +72,7 @@ const SleepDateRangeDropDown = () => {
         const datesFromAndTo = selectedValue.split('|');
         const sleepDateTimeFrom = datesFromAndTo[0];
         const sleepDateTimeTo = datesFromAndTo[1];
-        axios.get(`http://localhost:8080/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
+        axios.get(`https://mirthful-seat-production.up.railway.app/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setProp(response.data);
                 // Handle the response data as needed
@@ -80,7 +80,7 @@ const SleepDateRangeDropDown = () => {
             .catch((error) => {
                 console.error('Error fetching data based on selection:', error);
             });
-        axios.get(`http://localhost:8080/api/heartrate/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
+        axios.get(`https://mirthful-seat-production.up.railway.app/api/heartrate/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setHeartRateProp(response.data);
                 // Handle the response data as needed
@@ -88,7 +88,7 @@ const SleepDateRangeDropDown = () => {
             .catch((error) => {
                 console.error('Error fetching data based on selection:', error);
             });
-        axios.get(`http://localhost:8080/api/sleepdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
+        axios.get(`https://mirthful-seat-production.up.railway.app/api/sleepdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setSleepDataProp(response.data);
                 // Handle the response data as needed
@@ -97,7 +97,7 @@ const SleepDateRangeDropDown = () => {
                 console.error('Error fetching data based on selection:', error);
             });
         // test
-        axios.get(`http://localhost:8080/api/view`)
+        axios.get(`https://mirthful-seat-production.up.railway.app/api/view`)
             .then((response) => {
                 console.log("view response: " + response.data);
                 // Handle the response data as needed
