@@ -96,6 +96,15 @@ const SleepDateRangeDropDown = () => {
             .catch((error) => {
                 console.error('Error fetching data based on selection:', error);
             });
+        // test
+        axios.get(`http://localhost:8080/api/view`)
+            .then((response) => {
+                console.log("view response: " + response.data);
+                // Handle the response data as needed
+            })
+            .catch((error) => {
+                console.error('Error fetching data based on selection:', error);
+            });
     };
 
     return (

@@ -60,9 +60,9 @@ const SleepDataLineChart = ({ prop }) => {
         let sleepDataReadings = [];
 
         sorted = prop;
-        sorted.sort((a,b) => new Date(a.sdDateTime) - new Date(b.sdDateTime));
+        sorted.sort((a,b) => new Date(a.sdDateTimeFrom) - new Date(b.sdDateTimeFrom));
         sorted.forEach(dataObj => {
-            time.push(dataObj.sdTime);
+            time.push(dataObj.sdTimeFrom);
             sleepDataReadings.push(dataObj.level);
         })
         console.log(sleepDataReadings);
