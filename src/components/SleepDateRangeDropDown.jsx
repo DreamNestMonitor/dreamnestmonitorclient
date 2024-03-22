@@ -9,37 +9,25 @@ import SummaryInfo from "./SummaryInfo.jsx";
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [prop, setProp] = useState([{
-        labels: [],
-        datasets: [
-            {
-                label: "",
-                data: [],
-                borderColor: "",
-                backgroundColor: "",
-            }
-        ]
+        environmentDataID: "",
+        envDateTime: "",
+        envDate: "",
+        envTime: "",
+        temp: 0,
+        brightness: 0,
+        noise: 0,
     }])
-    const [heartRateProp, setHeartRateProp] = useState([{
-        labels: [],
-        datasets: [
-            {
-                label: "",
-                data: [],
-                borderColor: "",
-                backgroundColor: "",
-            }
-        ]
-    }])
+    const [heartRateProp, setHeartRateProp] = useState([])
     const [sleepDataProp, setSleepDataProp] = useState([{
-        labels: [],
-        datasets: [
-            {
-                label: "",
-                data: [],
-                borderColor: "",
-                backgroundColor: "",
-            }
-        ]
+        sleepDataID: "",
+        sdDateTimeFrom: "",
+        sdDateFrom: "",
+        sdTimeFrom: "",
+        sdDateTimeTo: "",
+        sdDateTo: "",
+        sdTimeTo: "",
+        seconds: 0,
+        level: "",
     }])
     const [data, setData] = useState([{
         sleepDateID: "",
@@ -61,6 +49,7 @@ const SleepDateRangeDropDown = () => {
     }, []);
 
     const fetchData = () => {
+        // axios.get('http://localhost:8080/api/sleepdate')
         axios.get('https://mirthful-seat-production.up.railway.app/api/sleepdate')
             .then((response) => {
                 setData(response.data);
@@ -77,6 +66,7 @@ const SleepDateRangeDropDown = () => {
         const sleepDateTimeFrom = datesFromAndTo[0];
         const sleepDateTimeTo = datesFromAndTo[1];
         setFromAndTo({"sleepDateTimeFrom": sleepDateTimeFrom, "sleepDateTimeTo": sleepDateTimeTo});
+        // axios.get(`http://localhost:8080/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
         axios.get(`https://mirthful-seat-production.up.railway.app/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setProp(response.data);
@@ -85,6 +75,7 @@ const SleepDateRangeDropDown = () => {
             .catch((error) => {
                 console.error('Error fetching data based on selection:', error);
             });
+        // axios.get(`http://localhost:8080/api/heartrate/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
         axios.get(`https://mirthful-seat-production.up.railway.app/api/heartrate/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setHeartRateProp(response.data);
@@ -93,6 +84,7 @@ const SleepDateRangeDropDown = () => {
             .catch((error) => {
                 console.error('Error fetching data based on selection:', error);
             });
+        // axios.get(`http://localhost:8080/api/sleepdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
         axios.get(`https://mirthful-seat-production.up.railway.app/api/sleepdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
                 setSleepDataProp(response.data);
@@ -102,6 +94,7 @@ const SleepDateRangeDropDown = () => {
                 console.error('Error fetching data based on selection:', error);
             });
         // test
+        // axios.get(`http://localhost:8080/api/view`)
         axios.get(`https://mirthful-seat-production.up.railway.app/api/view`)
             .then((response) => {
                 console.log("view response: " + response.data);

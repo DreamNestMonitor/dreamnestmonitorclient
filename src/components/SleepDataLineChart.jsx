@@ -10,6 +10,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import 'chartjs-adapter-luxon';
 import {Line} from "react-chartjs-2";
 
 ChartJS.register(
@@ -65,7 +66,6 @@ const SleepDataLineChart = ({ prop }) => {
             time.push(dataObj.sdTimeFrom);
             sleepDataReadings.push(dataObj.level);
         })
-        console.log(sleepDataReadings);
         if (sleepDataReadings.length === 0) {
             // If empty, set data to null
             setData(null);

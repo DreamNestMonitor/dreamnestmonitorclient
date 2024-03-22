@@ -2,163 +2,106 @@ import {useEffect, useState} from 'react'
 
 import {
     Chart as ChartJS,
-    CategoryScale,
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend,
+    TimeScale,
 } from 'chart.js';
-import {Line} from "react-chartjs-2";
+import 'chartjs-adapter-luxon';
+import {Scatter} from 'react-chartjs-2';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
+ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend, TimeScale);
 
-export const parentOptions = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top',
+export const options = {
+    scales: {
+        y: {
+            beginAtZero: true,
         },
-        title: {
-            display: true,
-        },
-    },
-};
-
-export const temperatureOption= {
-    ...parentOptions,
-    plugins: {
-        ...parentOptions.plugins,
-        title: {
-            ...parentOptions.plugins.title,
-            text: "Temperature Fluctuations"
-        },
-    },
-};
-
-export const brightnessOption= {
-    ...parentOptions,
-    plugins: {
-        ...parentOptions.plugins,
-        title: {
-            ...parentOptions.plugins.title,
-            text: "Brightness Fluctuations"
-        },
-    },
-};
-
-export const noiseOption= {
-    ...parentOptions,
-    plugins: {
-        ...parentOptions.plugins,
-        title: {
-            ...parentOptions.plugins.title,
-            text: "Noise Fluctuations"
-        },
-    },
-};
-
-export const heartRateOption= {
-    ...parentOptions,
-    plugins: {
-        ...parentOptions.plugins,
-        title: {
-            ...parentOptions.plugins.title,
-            text: "HeartRate Fluctuations"
+        x: {
+            type: 'time',
         },
     },
 };
 
 const EnvironmentDataLineCharts = ({ prop }) => {
-    const [data, setData] = useState({
-        labels: [],
+    const [temperatureData, setTemperatureData] = useState({
         datasets: [
             {
                 label: "",
                 data: [],
-                borderColor: "",
                 backgroundColor: "",
             }
         ]
     });
     const [brightnessData, setBrightnessData] = useState({
-        labels: [],
         datasets: [
             {
                 label: "",
                 data: [],
-                borderColor: "",
                 backgroundColor: "",
             }
         ]
     });
     const [noiseData, setNoiseData] = useState({
-        labels: [],
         datasets: [
             {
                 label: "",
                 data: [],
-                borderColor: "",
                 backgroundColor: "",
             }
         ]
     });
-
     const Chart = () => {
-        let sorted = [];
-        let time = [];
-        let tempReading = [];
-        let brightnessReading = [];
-        let noiseReading = [];
-
-        sorted = prop;
+        let sorted = prop;
+        let tempData = [];
+        let brightnessData = [];
+        let noiseData = [];
         sorted.sort((a,b) => new Date(a.envDateTime) - new Date(b.envDateTime));
         sorted.forEach(dataObj => {
-            time.push(dataObj.envTime);
-            tempReading.push(dataObj.temp);
-            brightnessReading.push(dataObj.brightness);
-            noiseReading.push(dataObj.noise);
-        })
-        setData({
-            labels: time,
+            tempData.push({
+                x: dataObj.envTime,
+                y: dataObj.temp,
+            });
+            brightnessData.push({
+                x: dataObj.envTime,
+                y: dataObj.brightness,
+            });
+            noiseData.push({
+                x: dataObj.envTime,
+                y: dataObj.noise,
+            });
+        });
+        console.log("tempData: ", tempData);
+        setTemperatureData({
             datasets: [
                 {
-                    label: "Temp",
-                    data: tempReading,
-                    borderColor: "rgb(255,99,132)",
+                    label: "temperature",
+                    data: tempData,
                     backgroundColor: "rgba(255, 99, 132, 0.5)",
-                }]
+                }
+            ]
         });
         setBrightnessData({
-            labels: time,
             datasets: [
                 {
-                    label: "Brightness",
-                    data: brightnessReading,
-                    borderColor: "rgb(225,231,21)",
+                    label: "brightness",
+                    data: brightnessData,
                     backgroundColor: "rgba(168,241,132,0.5)",
-                }]
+                }
+            ]
         });
         setNoiseData({
-            labels: time,
             datasets: [
                 {
-                    label: "Noise",
-                    data: noiseReading,
-                    borderColor: "rgb(50,83,205)",
+                    label: "noise",
+                    data: noiseData,
                     backgroundColor: "rgba(0,31,189,0.5)",
-                }]
+                }
+            ]
         });
-    }
+    };
 
     useEffect(() => {
         Chart();
@@ -166,9 +109,21 @@ const EnvironmentDataLineCharts = ({ prop }) => {
 
     return (
         <div>
-            <Line data={data} options={temperatureOption} />
-            <Line data={brightnessData} options={brightnessOption} />
-            <Line data={noiseData} options={noiseOption} />
+            {temperatureData.datasets[0].data.length !== 0 ? (
+                <Scatter data={temperatureData} options={options} />
+            ) : (
+                <p>Temperature data does not exist!</p>
+            )}
+            {brightnessData.datasets[0].data.length !== 0 ? (
+                <Scatter data={brightnessData} options={options} />
+            ) : (
+                <p>Brightness data does not exist!</p>
+            )}
+            {noiseData.datasets[0].data.length !== 0 ? (
+                <Scatter data={noiseData} options={options} />
+            ) : (
+                <p>Noise data does not exist!</p>
+            )}
         </div>
     )
 }
