@@ -21,6 +21,9 @@ export const options = {
         },
         x: {
             type: 'time',
+            time: {
+                unit: 'hour',
+            },
         },
     },
 };

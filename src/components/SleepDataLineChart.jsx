@@ -38,8 +38,14 @@ export const option = {
         y: {
             type: 'category',
             labels: ["rem", "deep", "light", "wake"]
+        },
+        x: {
+            type: 'time',
+            time: {
+                unit: 'hour'
+            }
         }
-    }
+    },
 };
 
 const SleepDataLineChart = ({ prop }) => {
@@ -56,16 +62,19 @@ const SleepDataLineChart = ({ prop }) => {
     });
 
     const Chart = () => {
-        let sorted = [];
+        let sleepData= [];
         let time = [];
         let sleepDataReadings = [];
 
-        sorted = prop;
-        sorted.sort((a,b) => new Date(a.sdDateTimeFrom) - new Date(b.sdDateTimeFrom));
-        sorted.forEach(dataObj => {
-            time.push(dataObj.sdTimeFrom);
+        // we can just let chart js sort the time i.e., put sdDateTimeFrom in time
+        sleepData = prop;
+        sleepData.forEach(dataObj => {
+            time.push(dataObj.sdDateTimeFrom);
             sleepDataReadings.push(dataObj.level);
         })
+        // add the sdDateTimeTo of the last element since there is a cutoff. The reading itself doesn't matter
+        time.push(sleepData[sleepData.length - 1].sdDateTimeTo);
+        sleepDataReadings.push(sleepData[sleepData.length - 1].level);
         if (sleepDataReadings.length === 0) {
             // If empty, set data to null
             setData(null);
@@ -78,6 +87,7 @@ const SleepDataLineChart = ({ prop }) => {
                         data: sleepDataReadings,
                         borderColor: "rgb(164,75,215)",
                         backgroundColor: "rgba(161,32,238,0.5)",
+                        stepped: true,
                     }]
             });
         }
