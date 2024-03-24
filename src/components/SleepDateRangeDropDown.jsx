@@ -6,6 +6,7 @@ import HeartRateDataLineChart from "./HeartRateDataLineChart.jsx";
 import SleepDataLineChart from "./SleepDataLineChart.jsx";
 import SummaryInfo from "./SummaryInfo.jsx";
 import ShortWakeStepLine from "./ShortWakeStepLine.jsx";
+import Correlations from "./Correlations.jsx";
 
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
@@ -66,6 +67,9 @@ const SleepDateRangeDropDown = () => {
         // axios.get('http://localhost:8080/api/sleepdate')
         axios.get('https://mirthful-seat-production.up.railway.app/api/sleepdate')
             .then((response) => {
+                let sleepDates = response.data;
+                sleepDates.sort((a,b) => new Date(a.sleepDateTimeFrom) - new Date(b.sleepDateTimeFrom));
+                // sort the dates just in case
                 setData(response.data);
             })
             .catch((error) => {
@@ -120,23 +124,30 @@ const SleepDateRangeDropDown = () => {
 
     return (
         <div>
-            <label htmlFor="dropdown">Start of Sleep Dates:</label>
-            <select id="dropdown" value={selectedOption} onChange={handleSelectChange}>
+            <div className={"mt-2"}>
+                <label htmlFor="dropdown">Select Sleep Schedule:</label>
+            </div>
+            <div className={"mt-1"}>
+            <select className={"border border-black"} id="dropdown" value={selectedOption} onChange={handleSelectChange}>
                 <option value="">Select...</option>
                 {data.map((item) => (
                     <option key={item.sleepDateID} value={`${item.sleepDateTimeFrom}|${item.sleepDateTimeTo}`}>
                         {moment(item.sleepDateTimeFrom).format("MMMM D, YYYY, h:mm:ss A")}
                     </option>
                 ))}
-            </select>
+                </select>
+            </div>
+
             {selectedOption ? (
                 <>
-                    <h2>Summary</h2>
-                    <SummaryInfo prop={fromAndTo} />
-                    <h2>Charts</h2>
+                    <div className={"text-3xl mt-2"}>Correlations</div>
+                    <Correlations />
+                    <div className={"text-2xl mt-2"}>Summary</div>
+                    <SummaryInfo prop={fromAndTo}/>
+                    <div className={"text-3xl mt-2"}>Conditions</div>
                     <EnvironmentDataLineCharts prop={prop}/>
                     <HeartRateDataLineChart prop={heartRateProp}/>
-                    <SleepDataLineChart prop={sleepDataProp} />
+                    <SleepDataLineChart prop={sleepDataProp}/>
                     <ShortWakeStepLine prop={shortWake} />
                 </>
             ) : null}

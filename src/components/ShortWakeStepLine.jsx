@@ -80,7 +80,7 @@ const ShortWakeStepLine = ({ prop }) => {
                 labels: time,
                 datasets: [
                     {
-                        label: "Sleep Levels",
+                        label: "Short Wakes",
                         data: shortWakeReadings,
                         borderColor: "rgb(164,75,215)",
                         backgroundColor: "rgba(161,32,238,0.5)",
