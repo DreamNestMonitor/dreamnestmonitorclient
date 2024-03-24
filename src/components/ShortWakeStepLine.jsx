@@ -31,13 +31,13 @@ export const option = {
         },
         title: {
             display: true,
-            text: "Sleep Level Fluctuations"
+            text: "Short Wake-ups"
         },
     },
     scales: {
         y: {
             type: 'category',
-            labels: ["rem", "deep", "light", "wake"]
+            labels: ["wake", "sleep"]
         },
         x: {
             type: 'time',
@@ -48,8 +48,8 @@ export const option = {
     },
 };
 
-const SleepDataLineChart = ({ prop }) => {
-    const [data, setData] = useState({
+const ShortWakeStepLine = ({ prop }) => {
+    const [shortWake, setShortWake] = useState({
         labels: [],
         datasets: [
             {
@@ -62,31 +62,26 @@ const SleepDataLineChart = ({ prop }) => {
     });
 
     const Chart = () => {
-        let sleepData= [];
+        let data = [];
         let time = [];
-        let sleepDataReadings = [];
+        let shortWakeReadings = [];
 
-        // we can just let chart js sort the time i.e., put sdDateTimeFrom in time
-        sleepData = prop;
-        sleepData.forEach(dataObj => {
-            time.push(dataObj.sdDateTimeFrom);
-            sleepDataReadings.push(dataObj.level);
-        })
-        // add the sdDateTimeTo of the last element since there is a cutoff. The reading itself doesn't matter
-        if (sleepData.length !== 0) {
-            time.push(sleepData[sleepData.length - 1].sdDateTimeTo);
-            sleepDataReadings.push(sleepData[sleepData.length - 1].level);
-        }
-        if (sleepDataReadings.length === 0) {
-            // If empty, set data to null
-            setData(null);
+        data = prop;
+        data.forEach(dataObj => {
+            time.push(dataObj.swDateTimeFrom);
+            shortWakeReadings.push("wake");
+            time.push(dataObj.swDateTimeTo);
+            shortWakeReadings.push("sleep");
+        });
+        if (shortWakeReadings.length === 0) {
+            setShortWake(null);
         } else {
-            setData({
+            setShortWake({
                 labels: time,
                 datasets: [
                     {
                         label: "Sleep Levels",
-                        data: sleepDataReadings,
+                        data: shortWakeReadings,
                         borderColor: "rgb(164,75,215)",
                         backgroundColor: "rgba(161,32,238,0.5)",
                         stepped: true,
@@ -101,13 +96,13 @@ const SleepDataLineChart = ({ prop }) => {
 
     return (
         <div>
-            {data ? (
-                <Line data={data} options={option}/>
+            {shortWake? (
+                <Line data={shortWake} options={option}/>
             ) : (
-                <p>Sleep data does not exist</p>
+                <p>Short wake data does not exist</p>
             )}
         </div>
     )
 }
 
-export default SleepDataLineChart;
+export default ShortWakeStepLine;

@@ -5,6 +5,7 @@ import moment from "moment";
 import HeartRateDataLineChart from "./HeartRateDataLineChart.jsx";
 import SleepDataLineChart from "./SleepDataLineChart.jsx";
 import SummaryInfo from "./SummaryInfo.jsx";
+import ShortWakeStepLine from "./ShortWakeStepLine.jsx";
 
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
@@ -17,7 +18,10 @@ const SleepDateRangeDropDown = () => {
         brightness: 0,
         noise: 0,
     }])
-    const [heartRateProp, setHeartRateProp] = useState([])
+    const [heartRateProp, setHeartRateProp] = useState([{
+        rateDateTime: "",
+        rate: 0,
+    }])
     const [sleepDataProp, setSleepDataProp] = useState([{
         sleepDataID: "",
         sdDateTimeFrom: "",
@@ -42,6 +46,16 @@ const SleepDateRangeDropDown = () => {
         sleepDateTimeFrom: "",
         sleepDateTimeTo: "",
     });
+    const [shortWake, setShortWake] = useState([{
+        shortWakeID: "",
+        swDateTimeFrom: "",
+        swDateFrom: "",
+        swTimeFrom: "",
+        swDateTimeTo: "",
+        swDateTo: "",
+        swTimeTo: "",
+        seconds: 0,
+    }])
 
     useEffect(() => {
         // Fetch data when the component mounts
@@ -93,11 +107,10 @@ const SleepDateRangeDropDown = () => {
             .catch((error) => {
                 console.error('Error fetching data based on selection:', error);
             });
-        // test
-        // axios.get(`http://localhost:8080/api/view`)
-        axios.get(`https://mirthful-seat-production.up.railway.app/api/view`)
+        // axios.get(`http://localhost:8080/api/shortwake/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
+        axios.get(`https://mirthful-seat-production.up.railway.app/api/shortwake/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
-                console.log("view response: " + response.data);
+                setShortWake(response.data);
                 // Handle the response data as needed
             })
             .catch((error) => {
@@ -124,6 +137,7 @@ const SleepDateRangeDropDown = () => {
                     <EnvironmentDataLineCharts prop={prop}/>
                     <HeartRateDataLineChart prop={heartRateProp}/>
                     <SleepDataLineChart prop={sleepDataProp} />
+                    <ShortWakeStepLine prop={shortWake} />
                 </>
             ) : null}
         </div>
