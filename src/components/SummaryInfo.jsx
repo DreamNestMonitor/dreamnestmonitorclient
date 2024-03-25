@@ -30,14 +30,14 @@ const SummaryInfo = ({ prop }) => {
     let { hours, minutes, seconds }= millisecondsToHMS(sleepDateTimeTo - sleepDateTimeFrom);
 
     return (
-       <div className={"mt-2 mb-2"}>
-           <div>You fell asleep on:
+       <div className={"mt-5 mb-2"}>
+           <div>Fell asleep on:
                <i> {moment(prop.sleepDateTimeFrom).format("MMMM D, YYYY, h:mm:ss A")}</i>
            </div>
-           <div>You woke up on:
+           <div>Woke up on:
                <i> {moment(prop.sleepDateTimeTo).format("MMMM D, YYYY, h:mm:ss A")}</i>
            </div>
-           <div>You slept for:
+           <div>Slept for:
                <i> {hours}h {minutes}m and {seconds}s</i>
            </div>
        </div>

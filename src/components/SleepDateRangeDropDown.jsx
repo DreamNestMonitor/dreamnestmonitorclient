@@ -17,7 +17,8 @@ const SleepDateRangeDropDown = () => {
         envTime: "",
         temp: 0,
         brightness: 0,
-        noise: 0,
+        loud: 0,
+        quiet: 0,
     }])
     const [heartRateProp, setHeartRateProp] = useState([{
         rateDateTime: "",
@@ -128,7 +129,7 @@ const SleepDateRangeDropDown = () => {
                 <label htmlFor="dropdown">Select Sleep Schedule:</label>
             </div>
             <div className={"mt-1"}>
-            <select className={"border border-black"} id="dropdown" value={selectedOption} onChange={handleSelectChange}>
+            <select className={"border border-gray-400"} id="dropdown" value={selectedOption} onChange={handleSelectChange}>
                 <option value="">Select...</option>
                 {data.map((item) => (
                     <option key={item.sleepDateID} value={`${item.sleepDateTimeFrom}|${item.sleepDateTimeTo}`}>
@@ -140,11 +141,11 @@ const SleepDateRangeDropDown = () => {
 
             {selectedOption ? (
                 <>
-                    <div className={"text-3xl mt-2"}>Correlations</div>
+                    <div className={"text-3xl mt-2 underline decoration-green-300 decoration-8 font-semibold"}>Correlations</div>
                     <Correlations />
-                    <div className={"text-2xl mt-2"}>Summary</div>
+                    <div className={"text-2xl mt-2 underline decoration-green-300 decoration-8 font-semibold"}>Summary</div>
                     <SummaryInfo prop={fromAndTo}/>
-                    <div className={"text-3xl mt-2"}>Conditions</div>
+                    <div className={"text-2xl mt-2 underline decoration-green-300 decoration-8 font-semibold"}>Conditions</div>
                     <EnvironmentDataLineCharts prop={prop}/>
                     <HeartRateDataLineChart prop={heartRateProp}/>
                     <SleepDataLineChart prop={sleepDataProp}/>
