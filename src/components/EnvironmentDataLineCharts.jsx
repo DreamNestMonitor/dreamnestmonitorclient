@@ -23,6 +23,13 @@ export const option1 = {
             },
         },
     },
+    plugins: {
+        title: {
+            display: true,
+            text: "Temperature Fluctuations"
+        },
+    },
+    maintainAspectRatio: false,
 };
 
 export const option2= {
@@ -37,6 +44,13 @@ export const option2= {
             },
         },
     },
+    plugins: {
+        title: {
+            display: true,
+            text: "Brightness Fluctuations"
+        },
+    },
+    maintainAspectRatio: false,
 };
 
 export const option3= {
@@ -52,6 +66,13 @@ export const option3= {
             },
         },
     },
+    plugins: {
+        title: {
+            display: true,
+            text: "Noise Fluctuations"
+        },
+    },
+    maintainAspectRatio: false,
 };
 
 const EnvironmentDataLineCharts = ({ prop }) => {
@@ -160,22 +181,30 @@ const EnvironmentDataLineCharts = ({ prop }) => {
     return (
         <div className={"mt-5"}>
             {temperatureData.datasets[0].data.length !== 0 ? (
-                <Scatter data={temperatureData} options={option1} />
+                <div className={"h-96"}>
+                    <Scatter data={temperatureData} options={option1} />
+                </div>
             ) : (
                 <p>Temperature data does not exist!</p>
             )}
             {brightnessData.datasets[0].data.length !== 0 ? (
-                <Scatter data={brightnessData} options={option2} />
+                <div className={"h-96"}>
+                    <Scatter data={brightnessData} options={option2} />
+                </div>
             ) : (
                 <p>Brightness data does not exist!</p>
             )}
             {loudData.datasets[0].data.length !== 0 ? (
-                <Scatter data={loudData} options={option3} />
+                <div className={"h-52"}>
+                    <Scatter data={loudData} options={option3} />
+                </div>
             ) : (
                 <p>Loud Noise data does not exist!</p>
             )}
             {quietData.datasets[0].data.length !== 0 ? (
-                <Scatter data={quietData} options={option3} />
+                <div className={"h-52"}>
+                    <Scatter data={quietData} options={option3} />
+                </div>
             ) : (
                 <p>Quiet Noise data does not exist!</p>
             )}

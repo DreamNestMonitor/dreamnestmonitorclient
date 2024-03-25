@@ -150,6 +150,7 @@ const SleepDateRangeDropDown = () => {
                     <HeartRateDataLineChart prop={heartRateProp}/>
                     <SleepDataLineChart prop={sleepDataProp}/>
                     <ShortWakeStepLine prop={shortWake} />
+                    <br />
                 </>
             ) : null}
         </div>

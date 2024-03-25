@@ -46,6 +46,7 @@ export const option = {
             }
         }
     },
+    maintainAspectRatio: false,
 };
 
 const ShortWakeStepLine = ({ prop }) => {
@@ -97,7 +98,9 @@ const ShortWakeStepLine = ({ prop }) => {
     return (
         <div>
             {shortWake? (
-                <Line data={shortWake} options={option}/>
+                <div className={"h-52"}>
+                    <Line data={shortWake} options={option}/>
+                </div>
             ) : (
                 <p>Short wake data does not exist</p>
             )}

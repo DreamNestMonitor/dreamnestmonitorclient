@@ -26,6 +26,7 @@ export const options = {
             },
         },
     },
+    maintainAspectRatio: false,
 };
 
 const HeartRateDataLineChart = ({ prop }) => {
@@ -71,7 +72,9 @@ const HeartRateDataLineChart = ({ prop }) => {
     return (
         <div>
             {heartRate? (
-                <Scatter data={heartRate} options={options}/>
+                <div className={"h-96"}>
+                    <Scatter data={heartRate} options={options}/>
+                </div>
             ) : (
                 <p>Heartbeat data does not exist</p>
             )}

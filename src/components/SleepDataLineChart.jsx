@@ -26,9 +26,6 @@ ChartJS.register(
 export const option = {
     responsive: true,
     plugins: {
-        legend: {
-            position: 'top',
-        },
         title: {
             display: true,
             text: "Sleep Level Fluctuations"
