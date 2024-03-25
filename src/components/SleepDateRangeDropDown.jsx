@@ -10,6 +10,13 @@ import Correlations from "./Correlations.jsx";
 
 const SleepDateRangeDropDown = () => {
     const [selectedOption, setSelectedOption] = useState("");
+    const [correlation, setCorrelation] = useState({
+        correlationID: "",
+        sleepStartDate: "",
+        temperatureCor: 0,
+        brightnessCor: 0,
+        noiseCor: 0,
+    })
     const [prop, setProp] = useState([{
         environmentDataID: "",
         envDateTime: "",
@@ -85,6 +92,15 @@ const SleepDateRangeDropDown = () => {
         const sleepDateTimeFrom = datesFromAndTo[0];
         const sleepDateTimeTo = datesFromAndTo[1];
         setFromAndTo({"sleepDateTimeFrom": sleepDateTimeFrom, "sleepDateTimeTo": sleepDateTimeTo});
+        // axios.get(`http://localhost:8080/api/correlations?startDate=${sleepDateTimeFrom}`)
+        axios.get(`https://mirthful-seat-production.up.railway.app/api/correlations?startDate=${sleepDateTimeFrom}`)
+            .then((response) => {
+                setCorrelation(response.data);
+                // Handle the response data as needed
+            })
+            .catch((error) => {
+                console.error('Error fetching data based on selection:', error);
+            });
         // axios.get(`http://localhost:8080/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
         axios.get(`https://mirthful-seat-production.up.railway.app/api/environmentdata/range?from=${sleepDateTimeFrom}&to=${sleepDateTimeTo}`)
             .then((response) => {
@@ -142,7 +158,7 @@ const SleepDateRangeDropDown = () => {
             {selectedOption ? (
                 <>
                     <div className={"text-3xl mt-2 underline decoration-green-300 decoration-8 font-semibold"}>Correlations</div>
-                    <Correlations />
+                    <Correlations prop={correlation}/>
                     <div className={"text-2xl mt-2 underline decoration-green-300 decoration-8 font-semibold"}>Summary</div>
                     <SummaryInfo prop={fromAndTo}/>
                     <div className={"text-2xl mt-2 underline decoration-green-300 decoration-8 font-semibold"}>Conditions</div>
